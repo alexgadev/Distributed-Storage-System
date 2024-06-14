@@ -7,7 +7,7 @@ from proto import store_pb2, store_pb2_grpc
 
 class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
     def __init__(self, master, addr=None):
-        self.storage = []
+        self.storage = {}
         self.delay = 0
 
         if not addr:
@@ -33,16 +33,16 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         for stub in self.slave_stubs:
             request = store_pb2.VoteRequest(key=request.key)
             response = stub.canCommit(request)
-            commit = commit and response.vote
+            commit = commit & response.vote
         
-        if commit:
+        if commit == True:
             comitted = True
             for stub in self.slave_stubs:
                 request = store_pb2.CommitRequest(key=request.key, value=request.value)
                 response = stub.doCommit(request)
-                committed = committed and response.comitted
+                committed = committed & response.comitted
 
-            if comitted:
+            if comitted == True:
                 self.storage[request.key] = request.value
                 return store_pb2.PutResponse(success=True)
             else:
@@ -54,8 +54,8 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
             return store_pb2.PutResponse(success=False)
 
     def get(self, request, context):
-        val = self.storage[request.key]
-
+        val = self.storage.get(request.key)
+        print(f"val: {val}")
         time.sleep(self.delay)
 
         if val:
@@ -74,7 +74,7 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         return store_pb2.RestoreResponse(success=True)
 
     def canCommit(self, request, context):
-        if not self.storage[request.key]:
+        if not self.storage.get(request.key):
             return store_pb2.VoteResponse(vote=True)
         else:
             return store_pb2.VoteResponse(vote=False)
@@ -84,7 +84,7 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         return store_pb2.CommitResponse(committed=True)
     
     def doAbort(self, request, context):
-        if self.storage[request.key]:
+        if self.storage.get(request.key):
             del self.storage[request.key]
         return store_pb2.Empty()
 
