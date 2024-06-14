@@ -11,6 +11,16 @@ service KeyValueStore {
 
   rpc restore(RestoreRequest) returns (RestoreResponse);
 
+  rpc registerNode(RegisterRequest) returns (Empty);
+
+  rpc canCommit(VoteRequest) returns (VoteResponse);
+
+  rpc doCommit(CommitRequest) returns (CommitResponse);
+
+  rpc doAbort(AbortRequest) returns (Empty);
+
+  rpc ping(Empty) returns (PingResponse);
+
 }
 
 message PutRequest {
@@ -43,6 +53,37 @@ message RestoreRequest {}
 
 message RestoreResponse {
   bool success = 1;
+}
+
+message RegisterRequest {
+  string address = 1;
+}
+
+message VoteRequest {
+  string key = 1;
+}
+
+message VoteResponse {
+  bool vote = 1;
+  int32 weight = 2;
+}
+
+message CommitRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message CommitResponse {
+  bool committed = 1;
+}
+
+message AbortRequest {
+  string key = 1;
+  string value = 2;
+}
+
+message PingResponse {
+  bool pong = 1;
 }
 
 message Empty {
