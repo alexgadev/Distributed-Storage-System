@@ -22,7 +22,7 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
             self.stub.registerNode(request)
 
     def registerNode(self, request, context):
-        channel = grpc.insecure_channel(request=address)
+        channel = grpc.insecure_channel(request.address)
         stub = store_pb2_grpc.KeyValueStoreStub(channel)
         self.slave_channels.append(channel)
         self.slave_stubs.append(stub)
@@ -73,6 +73,20 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         self.delay = 0
         return store_pb2.RestoreResponse(success=True)
 
+    def canCommit(self, request, context):
+        if not self.storage[request.key]:
+            return store_pb2.VoteResponse(vote=True)
+        else:
+            return store_pb2.VoteResponse(vote=False)
+    
+    def doCommit(self, request, context):
+        self.storage[request.key] = request.value
+        return store_pb2.CommitResponse(committed=True)
+    
+    def doAbort(self, request, context):
+        if self.storage[request.key]:
+            del self.storage[request.key]
+        return store_pb2.Empty()
 
 
 def serve():
@@ -87,19 +101,25 @@ def serve():
     store_pb2_grpc.add_KeyValueStoreServicer_to_server(StorageSystem(master=master_address), master)
     master.add_insecure_port(master_address)
     master.start()
-    master.wait_for_termination()
 
     # start slave nodes
+    slaves = []
     for slave in conf['slaves']:
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
         address = f"{slave['ip']}:{slave['port']}"
-        store_pb2_grpc.add_KeyValueStoreServicer_to_server(StorageSystem(master=master_address, addr=address), server=server)
+        store_pb2_grpc.add_KeyValueStoreServicer_to_server(StorageSystem(master=master_address, addr=address), server)
         server.add_insecure_port(address)
         server.start()
-        server.wait_for_termination()
+        slaves.append(server)
     
-    
+    try:
+        while True:
+            time.sleep(86400)
+    except KeyboardInterrupt:
+        server.stop(0)
+        for slave in slaves:
+            slave.stop(0)
 
 if __name__ == "__main__":
     serve()
