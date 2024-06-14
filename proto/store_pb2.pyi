@@ -89,12 +89,10 @@ class CommitResponse(_message.Message):
     def __init__(self, committed: bool = ...) -> None: ...
 
 class AbortRequest(_message.Message):
-    __slots__ = ("key", "value")
+    __slots__ = ("key",)
     KEY_FIELD_NUMBER: _ClassVar[int]
-    VALUE_FIELD_NUMBER: _ClassVar[int]
     key: str
-    value: str
-    def __init__(self, key: _Optional[str] = ..., value: _Optional[str] = ...) -> None: ...
+    def __init__(self, key: _Optional[str] = ...) -> None: ...
 
 class PingResponse(_message.Message):
     __slots__ = ("pong",)

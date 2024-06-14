@@ -31,31 +31,30 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
     def put(self, request, context):
         commit = True
         for stub in self.slave_stubs:
-            request = store_pb2.VoteRequest(key=request.key)
-            response = stub.canCommit(request)
+            req = store_pb2.VoteRequest(key=request.key)
+            response = stub.canCommit(req)
             commit = commit & response.vote
         
         if commit == True:
-            comitted = True
+            commit = True
             for stub in self.slave_stubs:
-                request = store_pb2.CommitRequest(key=request.key, value=request.value)
-                response = stub.doCommit(request)
-                committed = committed & response.comitted
+                req = store_pb2.CommitRequest(key=request.key, value=request.value)
+                response = stub.doCommit(req)
+                commit = commit & response.comitted
 
-            if comitted == True:
+            if commit == True:
                 self.storage[request.key] = request.value
                 return store_pb2.PutResponse(success=True)
             else:
                 for stub in self.slave_stubs:
-                    request = store_pb2.AbortRequest(key=request.key, value=request.value)
-                    stub.doAbort(request)
+                    req = store_pb2.AbortRequest(key=request.key)
+                    stub.doAbort(req)
                 return store_pb2.PutResponse(success=False)
         else:
             return store_pb2.PutResponse(success=False)
 
     def get(self, request, context):
         val = self.storage.get(request.key)
-        print(f"val: {val}")
         time.sleep(self.delay)
 
         if val:

@@ -79,7 +79,6 @@ message CommitResponse {
 
 message AbortRequest {
   string key = 1;
-  string value = 2;
 }
 
 message PingResponse {
