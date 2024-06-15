@@ -2,7 +2,7 @@ import subprocess
 
 def run_tests(test_script):
     try:
-        result = subprocess.run(["python", test_script], capture_output=True, text=True)
+        result = subprocess.run(["python3", test_script], capture_output=True, text=True)
         print(f"Logs for {test_script}:")
         print(result.stdout)
         if result.returncode != 0:
@@ -14,9 +14,9 @@ def run_tests(test_script):
 
 def main():
     centralized_success = run_tests("eval/centralized_system_tests.py")
-    #decentralized_success = run_tests("eval/decentralized_system_tests.py")
+    decentralized_success = run_tests("eval/decentralized_system_tests.py")
 
-    if centralized_success: #and decentralized_success:
+    if centralized_success and decentralized_success:
         print("All tests passed successfully.")
     else:
         print("Some tests failed.")

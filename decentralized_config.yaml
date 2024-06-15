@@ -1,0 +1,10 @@
+nodes:
+  - ip: 'localhost'
+    port: 32770
+    weight: 1
+  - ip: 'localhost'
+    port: 32771
+    weight: 2
+  - ip: 'localhost'
+    port: 32772
+    weight: 1

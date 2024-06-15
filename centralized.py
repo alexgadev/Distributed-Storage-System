@@ -5,7 +5,7 @@ import time
 from concurrent import futures
 from proto import store_pb2, store_pb2_grpc
 
-class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
+class CentralizedStorageSystem(store_pb2_grpc.KeyValueStoreServicer):
     def __init__(self, master, addr=None):
         self.storage = {}
         self.delay = 0
@@ -123,7 +123,6 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
     
     def doCommit(self, request, context):
         self.storage[request.key] = request.value
-        #self.write_to_consistency_file(self.consistency_file, request.key, request.value)
         return store_pb2.CommitResponse(committed=True)
     
     def doAbort(self, request, context):
@@ -141,7 +140,7 @@ def serve():
     master = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     master_address = f"{conf['master']['ip']}:{conf['master']['port']}"
-    store_pb2_grpc.add_KeyValueStoreServicer_to_server(StorageSystem(master=master_address), master)
+    store_pb2_grpc.add_KeyValueStoreServicer_to_server(CentralizedStorageSystem(master=master_address), master)
     master.add_insecure_port(master_address)
     master.start()
 
@@ -151,7 +150,7 @@ def serve():
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
         address = f"{slave['ip']}:{slave['port']}"
-        store_pb2_grpc.add_KeyValueStoreServicer_to_server(StorageSystem(master=master_address, addr=address), server)
+        store_pb2_grpc.add_KeyValueStoreServicer_to_server(CentralizedStorageSystem(master=master_address, addr=address), server)
         server.add_insecure_port(address)
         server.start()
         slaves.append(server)
