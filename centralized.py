@@ -10,11 +10,11 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         self.storage = {}
         self.delay = 0
 
-        if not addr:
+        if not addr: # master node
             self.address = master
             self.slave_channels = []
             self.slave_stubs = []
-        else:
+        else: # slave node
             self.address = addr
             self.channel = grpc.insecure_channel(master)
             self.stub = store_pb2_grpc.KeyValueStoreStub(self.channel)
@@ -29,20 +29,21 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         return store_pb2.Empty()
 
     def put(self, request, context):
-        commit = True
+        available = True
         for stub in self.slave_stubs:
-            req = store_pb2.VoteRequest(key=request.key)
-            response = stub.canCommit(req)
-            commit = commit & response.vote
+            vote_request = store_pb2.VoteRequest(key=request.key)
+            vote_response = stub.canCommit(vote_request)
+            available = available & vote_response.vote
         
-        if commit == True:
+        time.sleep(self.delay)
+        if available:
             commit = True
             for stub in self.slave_stubs:
-                req = store_pb2.CommitRequest(key=request.key, value=request.value)
-                response = stub.doCommit(req)
-                commit = commit & response.comitted
+                commit_request = store_pb2.CommitRequest(key=request.key, value=request.value)
+                commit_response = stub.doCommit(commit_request)
+                commit = commit & commit_response.committed
 
-            if commit == True:
+            if commit:
                 self.storage[request.key] = request.value
                 return store_pb2.PutResponse(success=True)
             else:
@@ -55,7 +56,7 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
 
     def get(self, request, context):
         val = self.storage.get(request.key)
-        time.sleep(self.delay)
+        #time.sleep(self.delay)
 
         if val:
             return store_pb2.GetResponse(value=val, found=True)
@@ -64,8 +65,6 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         
     def slowDown(self, request, context):
         self.delay += request.seconds
-        time.sleep(self.delay)
-
         return store_pb2.SlowDownResponse(success=True)
 
     def restore(self, request, context):
@@ -73,10 +72,7 @@ class StorageSystem(store_pb2_grpc.KeyValueStoreServicer):
         return store_pb2.RestoreResponse(success=True)
 
     def canCommit(self, request, context):
-        if not self.storage.get(request.key):
-            return store_pb2.VoteResponse(vote=True)
-        else:
-            return store_pb2.VoteResponse(vote=False)
+        return store_pb2.VoteResponse(vote=True)
     
     def doCommit(self, request, context):
         self.storage[request.key] = request.value
