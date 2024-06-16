@@ -79,10 +79,15 @@ class KeyValueStoreStub(object):
                 request_serializer=proto_dot_store__pb2.AbortRequest.SerializeToString,
                 response_deserializer=proto_dot_store__pb2.Empty.FromString,
                 _registered_method=True)
-        self.ping = channel.unary_unary(
-                '/distributedstore.KeyValueStore/ping',
-                request_serializer=proto_dot_store__pb2.Empty.SerializeToString,
-                response_deserializer=proto_dot_store__pb2.PingResponse.FromString,
+        self.gossip = channel.unary_unary(
+                '/distributedstore.KeyValueStore/gossip',
+                request_serializer=proto_dot_store__pb2.GossipRequest.SerializeToString,
+                response_deserializer=proto_dot_store__pb2.GossipResponse.FromString,
+                _registered_method=True)
+        self.askVote = channel.unary_unary(
+                '/distributedstore.KeyValueStore/askVote',
+                request_serializer=proto_dot_store__pb2.VoteRequest.SerializeToString,
+                response_deserializer=proto_dot_store__pb2.VoteResponse.FromString,
                 _registered_method=True)
 
 
@@ -137,7 +142,13 @@ class KeyValueStoreServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
-    def ping(self, request, context):
+    def gossip(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def askVote(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -186,10 +197,15 @@ def add_KeyValueStoreServicer_to_server(servicer, server):
                     request_deserializer=proto_dot_store__pb2.AbortRequest.FromString,
                     response_serializer=proto_dot_store__pb2.Empty.SerializeToString,
             ),
-            'ping': grpc.unary_unary_rpc_method_handler(
-                    servicer.ping,
-                    request_deserializer=proto_dot_store__pb2.Empty.FromString,
-                    response_serializer=proto_dot_store__pb2.PingResponse.SerializeToString,
+            'gossip': grpc.unary_unary_rpc_method_handler(
+                    servicer.gossip,
+                    request_deserializer=proto_dot_store__pb2.GossipRequest.FromString,
+                    response_serializer=proto_dot_store__pb2.GossipResponse.SerializeToString,
+            ),
+            'askVote': grpc.unary_unary_rpc_method_handler(
+                    servicer.askVote,
+                    request_deserializer=proto_dot_store__pb2.VoteRequest.FromString,
+                    response_serializer=proto_dot_store__pb2.VoteResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -419,7 +435,7 @@ class KeyValueStore(object):
             _registered_method=True)
 
     @staticmethod
-    def ping(request,
+    def gossip(request,
             target,
             options=(),
             channel_credentials=None,
@@ -432,9 +448,36 @@ class KeyValueStore(object):
         return grpc.experimental.unary_unary(
             request,
             target,
-            '/distributedstore.KeyValueStore/ping',
-            proto_dot_store__pb2.Empty.SerializeToString,
-            proto_dot_store__pb2.PingResponse.FromString,
+            '/distributedstore.KeyValueStore/gossip',
+            proto_dot_store__pb2.GossipRequest.SerializeToString,
+            proto_dot_store__pb2.GossipResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def askVote(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/distributedstore.KeyValueStore/askVote',
+            proto_dot_store__pb2.VoteRequest.SerializeToString,
+            proto_dot_store__pb2.VoteResponse.FromString,
             options,
             channel_credentials,
             insecure,

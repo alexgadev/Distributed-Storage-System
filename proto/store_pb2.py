@@ -14,7 +14,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11proto/store.proto\x12\x10\x64istributedstore\"(\n\nPutRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\x1e\n\x0bPutResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x19\n\nGetRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\"+\n\x0bGetResponse\x12\r\n\x05value\x18\x01 \x01(\t\x12\r\n\x05\x66ound\x18\x02 \x01(\x08\"\"\n\x0fSlowDownRequest\x12\x0f\n\x07seconds\x18\x01 \x01(\x05\"#\n\x10SlowDownResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x10\n\x0eRestoreRequest\"\"\n\x0fRestoreResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\"\n\x0fRegisterRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\"\x1a\n\x0bVoteRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\",\n\x0cVoteResponse\x12\x0c\n\x04vote\x18\x01 \x01(\x08\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"+\n\rCommitRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"#\n\x0e\x43ommitResponse\x12\x11\n\tcommitted\x18\x01 \x01(\x08\"\x1b\n\x0c\x41\x62ortRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\"\x1c\n\x0cPingResponse\x12\x0c\n\x04pong\x18\x01 \x01(\x08\"\x07\n\x05\x45mpty2\xa6\x05\n\rKeyValueStore\x12\x42\n\x03put\x12\x1c.distributedstore.PutRequest\x1a\x1d.distributedstore.PutResponse\x12\x42\n\x03get\x12\x1c.distributedstore.GetRequest\x1a\x1d.distributedstore.GetResponse\x12Q\n\x08slowDown\x12!.distributedstore.SlowDownRequest\x1a\".distributedstore.SlowDownResponse\x12N\n\x07restore\x12 .distributedstore.RestoreRequest\x1a!.distributedstore.RestoreResponse\x12J\n\x0cregisterNode\x12!.distributedstore.RegisterRequest\x1a\x17.distributedstore.Empty\x12J\n\tcanCommit\x12\x1d.distributedstore.VoteRequest\x1a\x1e.distributedstore.VoteResponse\x12M\n\x08\x64oCommit\x12\x1f.distributedstore.CommitRequest\x1a .distributedstore.CommitResponse\x12\x42\n\x07\x64oAbort\x12\x1e.distributedstore.AbortRequest\x1a\x17.distributedstore.Empty\x12?\n\x04ping\x12\x17.distributedstore.Empty\x1a\x1e.distributedstore.PingResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11proto/store.proto\x12\x10\x64istributedstore\"(\n\nPutRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"\x1e\n\x0bPutResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x19\n\nGetRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\"+\n\x0bGetResponse\x12\r\n\x05value\x18\x01 \x01(\t\x12\r\n\x05\x66ound\x18\x02 \x01(\x08\"\"\n\x0fSlowDownRequest\x12\x0f\n\x07seconds\x18\x01 \x01(\x05\"#\n\x10SlowDownResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x10\n\x0eRestoreRequest\"\"\n\x0fRestoreResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"2\n\x0fRegisterRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"#\n\x10RegisterResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\"\x1a\n\x0bVoteRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\"+\n\x0cVoteResponse\x12\x0c\n\x04vote\x18\x01 \x01(\x08\x12\r\n\x05value\x18\x02 \x01(\t\"+\n\rCommitRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\x12\r\n\x05value\x18\x02 \x01(\t\"#\n\x0e\x43ommitResponse\x12\x11\n\tcommitted\x18\x01 \x01(\x08\"\x1b\n\x0c\x41\x62ortRequest\x12\x0b\n\x03key\x18\x01 \x01(\t\"0\n\rGossipRequest\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"1\n\x0eGossipResponse\x12\x0f\n\x07\x61\x64\x64ress\x18\x01 \x01(\t\x12\x0e\n\x06weight\x18\x02 \x01(\x05\"\x07\n\x05\x45mpty2\xfc\x05\n\rKeyValueStore\x12\x42\n\x03put\x12\x1c.distributedstore.PutRequest\x1a\x1d.distributedstore.PutResponse\x12\x42\n\x03get\x12\x1c.distributedstore.GetRequest\x1a\x1d.distributedstore.GetResponse\x12Q\n\x08slowDown\x12!.distributedstore.SlowDownRequest\x1a\".distributedstore.SlowDownResponse\x12N\n\x07restore\x12 .distributedstore.RestoreRequest\x1a!.distributedstore.RestoreResponse\x12J\n\x0cregisterNode\x12!.distributedstore.RegisterRequest\x1a\x17.distributedstore.Empty\x12J\n\tcanCommit\x12\x1d.distributedstore.VoteRequest\x1a\x1e.distributedstore.VoteResponse\x12M\n\x08\x64oCommit\x12\x1f.distributedstore.CommitRequest\x1a .distributedstore.CommitResponse\x12\x42\n\x07\x64oAbort\x12\x1e.distributedstore.AbortRequest\x1a\x17.distributedstore.Empty\x12K\n\x06gossip\x12\x1f.distributedstore.GossipRequest\x1a .distributedstore.GossipResponse\x12H\n\x07\x61skVote\x12\x1d.distributedstore.VoteRequest\x1a\x1e.distributedstore.VoteResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -38,21 +38,25 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_RESTORERESPONSE']._serialized_start=276
   _globals['_RESTORERESPONSE']._serialized_end=310
   _globals['_REGISTERREQUEST']._serialized_start=312
-  _globals['_REGISTERREQUEST']._serialized_end=346
-  _globals['_VOTEREQUEST']._serialized_start=348
-  _globals['_VOTEREQUEST']._serialized_end=374
-  _globals['_VOTERESPONSE']._serialized_start=376
-  _globals['_VOTERESPONSE']._serialized_end=420
-  _globals['_COMMITREQUEST']._serialized_start=422
-  _globals['_COMMITREQUEST']._serialized_end=465
-  _globals['_COMMITRESPONSE']._serialized_start=467
-  _globals['_COMMITRESPONSE']._serialized_end=502
-  _globals['_ABORTREQUEST']._serialized_start=504
-  _globals['_ABORTREQUEST']._serialized_end=531
-  _globals['_PINGRESPONSE']._serialized_start=533
-  _globals['_PINGRESPONSE']._serialized_end=561
-  _globals['_EMPTY']._serialized_start=563
-  _globals['_EMPTY']._serialized_end=570
-  _globals['_KEYVALUESTORE']._serialized_start=573
-  _globals['_KEYVALUESTORE']._serialized_end=1251
+  _globals['_REGISTERREQUEST']._serialized_end=362
+  _globals['_REGISTERRESPONSE']._serialized_start=364
+  _globals['_REGISTERRESPONSE']._serialized_end=399
+  _globals['_VOTEREQUEST']._serialized_start=401
+  _globals['_VOTEREQUEST']._serialized_end=427
+  _globals['_VOTERESPONSE']._serialized_start=429
+  _globals['_VOTERESPONSE']._serialized_end=472
+  _globals['_COMMITREQUEST']._serialized_start=474
+  _globals['_COMMITREQUEST']._serialized_end=517
+  _globals['_COMMITRESPONSE']._serialized_start=519
+  _globals['_COMMITRESPONSE']._serialized_end=554
+  _globals['_ABORTREQUEST']._serialized_start=556
+  _globals['_ABORTREQUEST']._serialized_end=583
+  _globals['_GOSSIPREQUEST']._serialized_start=585
+  _globals['_GOSSIPREQUEST']._serialized_end=633
+  _globals['_GOSSIPRESPONSE']._serialized_start=635
+  _globals['_GOSSIPRESPONSE']._serialized_end=684
+  _globals['_EMPTY']._serialized_start=686
+  _globals['_EMPTY']._serialized_end=693
+  _globals['_KEYVALUESTORE']._serialized_start=696
+  _globals['_KEYVALUESTORE']._serialized_end=1460
 # @@protoc_insertion_point(module_scope)

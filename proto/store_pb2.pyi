@@ -55,10 +55,18 @@ class RestoreResponse(_message.Message):
     def __init__(self, success: bool = ...) -> None: ...
 
 class RegisterRequest(_message.Message):
-    __slots__ = ("address",)
+    __slots__ = ("address", "weight")
     ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
     address: str
-    def __init__(self, address: _Optional[str] = ...) -> None: ...
+    weight: int
+    def __init__(self, address: _Optional[str] = ..., weight: _Optional[int] = ...) -> None: ...
+
+class RegisterResponse(_message.Message):
+    __slots__ = ("success",)
+    SUCCESS_FIELD_NUMBER: _ClassVar[int]
+    success: bool
+    def __init__(self, success: bool = ...) -> None: ...
 
 class VoteRequest(_message.Message):
     __slots__ = ("key",)
@@ -67,12 +75,12 @@ class VoteRequest(_message.Message):
     def __init__(self, key: _Optional[str] = ...) -> None: ...
 
 class VoteResponse(_message.Message):
-    __slots__ = ("vote", "weight")
+    __slots__ = ("vote", "value")
     VOTE_FIELD_NUMBER: _ClassVar[int]
-    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    VALUE_FIELD_NUMBER: _ClassVar[int]
     vote: bool
-    weight: int
-    def __init__(self, vote: bool = ..., weight: _Optional[int] = ...) -> None: ...
+    value: str
+    def __init__(self, vote: bool = ..., value: _Optional[str] = ...) -> None: ...
 
 class CommitRequest(_message.Message):
     __slots__ = ("key", "value")
@@ -94,11 +102,21 @@ class AbortRequest(_message.Message):
     key: str
     def __init__(self, key: _Optional[str] = ...) -> None: ...
 
-class PingResponse(_message.Message):
-    __slots__ = ("pong",)
-    PONG_FIELD_NUMBER: _ClassVar[int]
-    pong: bool
-    def __init__(self, pong: bool = ...) -> None: ...
+class GossipRequest(_message.Message):
+    __slots__ = ("address", "weight")
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    address: str
+    weight: int
+    def __init__(self, address: _Optional[str] = ..., weight: _Optional[int] = ...) -> None: ...
+
+class GossipResponse(_message.Message):
+    __slots__ = ("address", "weight")
+    ADDRESS_FIELD_NUMBER: _ClassVar[int]
+    WEIGHT_FIELD_NUMBER: _ClassVar[int]
+    address: str
+    weight: int
+    def __init__(self, address: _Optional[str] = ..., weight: _Optional[int] = ...) -> None: ...
 
 class Empty(_message.Message):
     __slots__ = ()

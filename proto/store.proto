@@ -19,7 +19,7 @@ service KeyValueStore {
 
   rpc doAbort(AbortRequest) returns (Empty);
 
-  rpc gossip(GossipRequest) returns (Empty);
+  rpc gossip(GossipRequest) returns (GossipResponse);
 
   rpc askVote(VoteRequest) returns (VoteResponse);
 
@@ -89,6 +89,11 @@ message AbortRequest {
 }
 
 message GossipRequest {
+  string address = 1;
+  int32 weight = 2;
+}
+
+message GossipResponse {
   string address = 1;
   int32 weight = 2;
 }
